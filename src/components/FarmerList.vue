@@ -1,35 +1,40 @@
 <template>
-  <div class="farmer-list">
-    <h2>Select Your Profile</h2>
-    <div class="farmers">
-      <button
-        v-for="farmer in farmer"
+  <div class="p-6">
+    <h1 class="text-3xl font-bold mb-6 text-green-700">Choose Your Profile</h1>
+
+    <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+      <div
+        v-for="farmer in farmers"
         :key="farmer.id"
         @click="$emit('select-farmer', farmer.id)"
-        class="farmer-card"
+        class="cursor-pointer bg-white shadow-md rounded-xl p-5 border hover:bg-green-50 transition"
       >
-        👨‍🌾 {{ farmer.name }}
-      </button>
+        <div class="flex items-center space-x-4">
+          <div class="text-green-600 text-3xl">
+            🧑‍🌾
+          </div>
+          <div>
+            <p class="text-lg font-semibold">{{ farmer.name }}</p>
+            <p class="text-sm text-gray-500">Tap to manage inventory</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-defineProps(['farmers'])
-defineEmits(['select-farmer'])
+defineProps({
+  farmers: {
+    type: Array,
+    required: true,
+  }
+})
 </script>
 
 <style scoped>
-.farmer-list {
-  text-align: center;
-}
-.farmer-card {
-  margin: 1rem;
-  padding: 1rem;
-  border: 1px solid #ccc;
-  background-color: #f0f8ff;
-  border-radius: 8px;
-  font-size: 1.2rem;
-  cursor: pointer;
+.card:hover {
+  transform: scale(1.02);
+  transition: transform 0.2s ease;
 }
 </style>

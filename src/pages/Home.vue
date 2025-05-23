@@ -1,6 +1,6 @@
 <template>
   <div>
-    <FarmerList :farmer="farmer" @select-farmer="goToInventory" />
+    <FarmerList :farmers="farmers" @select-farmer="goToInventory" />
   </div>
 </template>
 
@@ -16,9 +16,9 @@ const router = useRouter()
 onMounted(async () => {
   const { data, error } = await supabase.from('farmer').select()
   if (error) {
-    console.error('Failed to fetch farmer:', error.message)
+    console.error('Failed to fetch farmers:', error.message)
   } else {
-    farmer.value = data
+    farmers.value = data
   }
 })
 
