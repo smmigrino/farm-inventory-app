@@ -3,7 +3,7 @@
     <h2>Select Your Profile</h2>
     <div class="farmers">
       <button
-        v-for="farmer in farmers"
+        v-for="farmer in farmer"
         :key="farmer.id"
         @click="$emit('select-farmer', farmer.id)"
         class="farmer-card"
