@@ -1,10 +1,10 @@
 <template>
   <div>
     <h1>Welcome to the Farm Inventory App</h1>
-    <p>Select your profile to continue</p>
+    <p>Select your farmer profile to continue.</p>
   </div>
 </template>
 
 <script setup>
-// We’ll fetch farmer profiles from Supabase here later
+// no logic yet, just making it valid
 </script>
