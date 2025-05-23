@@ -6,5 +6,5 @@
 </template>
 
 <script setup>
-// placeholder logic, if needed later
+// placeholder logic, if needed later here
 </script>
