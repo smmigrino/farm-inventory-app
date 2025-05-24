@@ -14,6 +14,7 @@ const farmers = ref([])
 const router = useRouter()
 
 onMounted(async () => {
+    ';'
   const { data, error } = await supabase.from('farmer').select()
   if (error) {
     console.error('Failed to fetch farmers:', error.message)

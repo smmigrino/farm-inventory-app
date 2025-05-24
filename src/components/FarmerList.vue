@@ -1,6 +1,6 @@
 <template>
   <div class="p-6">
-    <h1 class="text-3xl font-bold mb-6 text-green-700">Choose Your Profile</h1>
+    <h1 class="text-3xl font-bold mb-6 text-green-700">Select Your Profile</h1>
 
     <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
       <div
