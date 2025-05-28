@@ -42,9 +42,11 @@ export default {
     font-size: 32px;
     height: 105px;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     text-align: left;
-    justify-content: center;
+    justify-content: flex-start;
+    padding-left: 5px;
+    padding-bottom: 10px;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
 }
