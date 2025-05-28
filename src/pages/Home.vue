@@ -43,6 +43,7 @@ export default {
     height: 105px;
     display: flex;
     align-items: center;
+    text-align: left;
     justify-content: center;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
