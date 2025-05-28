@@ -82,7 +82,7 @@ export default {
 .avatar {
     width: 80%;
     height: auto;
-    margin-bottom: 15px;
+    
 }
 .farmer-name {
     font-family: 'Roboto', sans-serif;
