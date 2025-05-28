@@ -85,7 +85,8 @@ export default {
     margin-bottom: 15px;
 }
 .farmer-name {
-    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 24px;
     color: white;
     text-align: center;
 }</style>
