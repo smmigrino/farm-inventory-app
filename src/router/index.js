@@ -3,11 +3,13 @@ import Home from '../pages/Home.vue';
 import Inventory from '../pages/Inventory.vue';
 
 const routes = [
-  { path: '/', component: Home },
-  { path: '/inventory/:farmerId', component: Inventory },
-];
+  { path: '/', name: 'Home', component: Home },
+  { path: '/inventory/:farmerId', name: 'Inventory', component: Inventory, props: true },
+]; //updated
 
-export default createRouter({
+const router = createRouter({
   history: createWebHistory(),
-  routes,
-});
+  routes
+}); //updated
+
+export default router; //added
