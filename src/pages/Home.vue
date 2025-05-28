@@ -56,7 +56,7 @@ export default {
     justify-content: center;
     align-items: center;
     text-align: center;
-    margin: 20px;
+    margin: 20px 0px 50px 0px;
 }
 .farmer-list {
     display: flex;
