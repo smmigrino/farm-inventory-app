@@ -66,7 +66,7 @@ export default {
 }
 .farmer-card {
     width: 150px;
-    height: 170px;
+    height: 150px;
     background-color: #66b2b2;
     border-radius: 10px;
     display: flex;
