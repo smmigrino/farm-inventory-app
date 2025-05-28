@@ -51,6 +51,7 @@ export default {
     color: #004c4c;
     font-size: 35px;
     justify-content: center;
+    align-items: center;
     margin: 20px;
 }
 .farmer-list {
