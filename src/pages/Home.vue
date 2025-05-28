@@ -92,5 +92,5 @@ export default {
     color: white;
     text-align: center;
     margin: 0; /* remove any unwanted gap */
-    padding-top: 5px;
+    padding-top: 10px;
 }</style>
