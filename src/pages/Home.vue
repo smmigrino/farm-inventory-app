@@ -82,7 +82,6 @@ export default {
 .avatar {
     width: 80%;
     height: auto;
-    margin-bottom: -5px; /* pulls the name closer */
     margin-top: -30px; /* optional: for more overlap with card */
     z-index: 1;
     
