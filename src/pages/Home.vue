@@ -82,6 +82,9 @@ export default {
 .avatar {
     width: 80%;
     height: auto;
+    margin-bottom: -10px; /* pulls the name closer */
+    margin-top: -30px; /* optional: for more overlap with card */
+    z-index: 1;
     
 }
 .farmer-name {
@@ -89,4 +92,6 @@ export default {
     font-size: 24px;
     color: white;
     text-align: center;
+    margin: 0; /* remove any unwanted gap */
+    padding-top: 5px;
 }</style>
