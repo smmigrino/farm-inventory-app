@@ -52,6 +52,7 @@ export default {
     font-size: 35px;
     justify-content: center;
     align-items: center;
+    text-align: center;
     margin: 20px;
 }
 .farmer-list {
