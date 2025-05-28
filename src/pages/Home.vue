@@ -50,6 +50,7 @@ export default {
 .header {
     color: #004c4c;
     font-size: 35px;
+    justify-content: center;
     margin: 20px;
 }
 .farmer-list {
