@@ -45,7 +45,7 @@ export default {
     align-items: flex-end;
     text-align: left;
     justify-content: flex-start;
-    padding-left: 5px;
+    padding-left: 20px;
     padding-bottom: 10px;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
