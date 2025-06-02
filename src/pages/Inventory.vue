@@ -4,7 +4,7 @@
     <div class="app-bar">
       <div class="left-bar">
         <div class="avatar-circle">
-          <img src="/farmer-avatar.png" alt="avatar" class="avatar-img" />
+          <img :src="farmerAvatar" alt="avatar" class="avatar-img" />
         </div>
         <span class="farmer-name">{{ farmerName }}</span>
       </div>
@@ -40,6 +40,7 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { supabase } from '@/lib/supabase'
+import farmerAvatar from '@/assets/farmer-avatar.png'
 
 
 const route = useRoute()
