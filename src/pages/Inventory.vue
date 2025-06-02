@@ -1,137 +1,89 @@
 <template>
-  <div class="inventory-page">
-    <div class="app-bar">
-      <div class="app-bar-left">
-        <div class="avatar-wrapper">
-          <img src="@/assets/farmer-avatar.png" alt="Avatar" class="avatar" />
-          <span class="farmer-name">{{ farmer.name }}</span>
-        </div>
-      </div>
-      <img src="@/assets/back-arrow.png" alt="Back" class="back-arrow" @click="goBack" />
+  <div class="min-h-screen flex flex-col items-center justify-center p-4 bg-gray-50">
+    <!-- Title -->
+    <h1 class="text-2xl sm:text-3xl font-bold text-green-700 mb-4">Items</h1>
+
+    <!-- Item Selection Button -->
+    <div
+      class="w-full max-w-sm text-center py-3 px-4 bg-white rounded-lg border cursor-pointer shadow-sm mb-6"
+      @click="showItemSelection = true"
+    >
+      {{ selectedItem?.name || 'Select an item' }}
     </div>
 
-    <h1 class="title">Log to Inventory</h1>
+    <!-- Quantity Title -->
+    <h2 class="text-xl sm:text-2xl font-semibold text-green-700 mb-4">Quantity</h2>
 
-    <h2 class="label">Add Item</h2>
-    <div class="textfield" @click="goToItemSelection">
-      {{ selectedItem ? selectedItem.name : 'Item Name' }}
+    <!-- Quantity Selection Button -->
+    <div
+      class="w-full max-w-sm text-center py-3 px-4 bg-white rounded-lg border cursor-pointer shadow-sm mb-6"
+      @click="showQuantityInput = true"
+    >
+      {{ quantity || 'Enter quantity' }}
     </div>
 
-    <h2 class="label">Quantity</h2>
-    <div class="textfield" @click="goToQuantityInput">
-      {{ quantity ? quantity + 'kg' : '00kg' }}
+    <!-- SRP per KG -->
+    <div v-if="selectedItem?.srp_per_kg" class="text-base text-gray-700 mb-8">
+      SRP per kg: ₱{{ selectedItem.srp_per_kg }}
     </div>
 
-    <h2 class="label">SRP per KG</h2>
-    <div class="srp-display">
-      {{ srpPerKg ? `₱${srpPerKg.toFixed(2)}` : '₱00.00' }}
+    <!-- Action Buttons -->
+    <div class="flex flex-col sm:flex-row gap-4 w-full max-w-sm">
+      <button
+        class="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+        @click="confirmSubmit"
+      >
+        Submit
+      </button>
+      <button
+        class="w-full bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300"
+        @click="addMoreItems"
+      >
+        Add More
+      </button>
     </div>
+
+    <!-- Modals -->
+    <ItemSelection
+      v-if="showItemSelection"
+      @item-selected="handleItemSelected"
+      @close="showItemSelection = false"
+    />
+    <QuantityInput
+      v-if="showQuantityInput"
+      @quantity-selected="handleQuantitySelected"
+      @close="showQuantityInput = false"
+    />
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { supabase } from '@/lib/supabase';
+import { ref } from 'vue'
+import ItemSelection from '../components/ItemSelection.vue'
+import QuantityInput from '../components/QuantityInput.vue'
+// import ConfirmDialog from '../components/ConfirmDialog.vue'
 
-const route = useRoute();
-const router = useRouter();
+const showItemSelection = ref(false)
+const showQuantityInput = ref(false)
 
-const farmerId = route.params.id;
-const farmer = ref({ name: '' });
-const selectedItem = ref(null);
-const quantity = ref(null);
-const srpPerKg = ref(null);
+const selectedItem = ref(null)
+const quantity = ref(null)
 
-onMounted(async () => {
-  const { data, error } = await supabase.from('farmer').select('name').eq('id', farmerId).single();
-  if (data) {
-    farmer.value = data;
-  }
-});
+function handleItemSelected(item) {
+  selectedItem.value = item
+  showItemSelection.value = false
+}
 
-const goBack = () => {
-  router.push('/');
-};
+function handleQuantitySelected(qty) {
+  quantity.value = qty
+  showQuantityInput.value = false
+}
 
-const goToItemSelection = () => {
-  router.push({ name: 'item-selection', query: { from: 'inventory', farmerId } });
-};
+function confirmSubmit() {
+  alert('Submit clicked (ConfirmDialog goes here)')
+}
 
-const goToQuantityInput = () => {
-  router.push({ name: 'quantity-input', query: { from: 'inventory', farmerId } });
-};
+function addMoreItems() {
+  alert('Add more clicked (will store item + qty)')
+}
 </script>
-
-<style scoped>
-.inventory-page {
-  padding: 20px;
-  font-family: 'Roboto', sans-serif;
-  color: #006666;
-  text-align: center;
-}
-
-.app-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #006666;
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
-  height: 105px;
-  padding: 0 20px;
-}
-
-.avatar-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.avatar {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: white;
-  object-fit: cover;
-}
-
-.farmer-name {
-  font-size: 32px;
-  color: #B2D8D8;
-}
-
-.back-arrow {
-  width: 50px;
-  cursor: pointer;
-}
-
-.title {
-  font-size: 32px;
-  margin: 20px 0 50px;
-}
-
-.label {
-  font-size: 25px;
-  margin: 0 0 20px;
-}
-
-.textfield {
-  background-color: #006666;
-  color: #B2D8D8;
-  font-family: 'Inter', sans-serif;
-  font-style: italic;
-  font-weight: 500;
-  font-size: 20px;
-  border-radius: 20px;
-  padding: 15px;
-  margin-bottom: 70px;
-  text-align: center;
-  cursor: pointer;
-}
-
-.srp-display {
-  font-size: 20px;
-  margin-bottom: 30px;
-}
-</style>
