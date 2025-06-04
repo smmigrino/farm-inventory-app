@@ -278,8 +278,8 @@ const confirmSubmission = async () => {
 }
 
 .action-button {
-  height: 50px;
-  width: 90px;
+  height: 100px;
+  width: 120px;
   background-color: #008080;
   border-radius: 25px;
   color: #b2d8d8;
