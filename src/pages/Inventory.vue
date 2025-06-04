@@ -170,3 +170,119 @@ const confirmSubmission = async () => {
   router.push({ name: 'ItemSummary', params: { farmerId } });
 };
 </script>
+
+
+<style scoped>
+.inventory-container {
+  padding: 20px;
+  font-family: Roboto, sans-serif;
+}
+
+.app-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #006666;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  height: 105px;
+  padding: 0 20px;
+}
+
+.app-bar-left {
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: white;
+  margin-right: 10px;
+}
+
+.farmer-name {
+  color: #b2d8d8;
+  font-size: 32px;
+}
+
+.back-icon {
+  width: 50px;
+  cursor: pointer;
+}
+
+.header {
+  text-align: center;
+  color: #006666;
+  font-size: 32px;
+  margin: 20px 0 50px 0;
+}
+
+.section-title {
+  text-align: center;
+  color: #006666;
+  font-size: 25px;
+  margin: 0 0 20px 0;
+}
+
+.input-box {
+  background-color: #006666;
+  border-radius: 20px;
+  margin: 0 0 70px 0;
+  text-align: center;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.input-text {
+  font-family: 'Inter', sans-serif;
+  font-style: italic;
+  font-size: 20px;
+  color: #b2d8d8;
+}
+
+.srp-text {
+  text-align: center;
+  font-size: 20px;
+  color: #006666;
+  margin-bottom: 50px;
+}
+
+.button-row {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin: 50px 0;
+}
+
+.action-button {
+  height: 90px;
+  width: 150px;
+  background-color: #008080;
+  border-radius: 50px;
+  color: #b2d8d8;
+  font-weight: 600;
+  font-size: 20px; /* Adjusted font size */
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  line-height: 1.2;
+}
+
+@media (max-width: 600px) {
+  .action-button {
+    height: 70px;
+    width: 120px;
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .action-button {
+    height: 100px;
+    width: 160px;
+    font-size: 22px;
+  }
+}
+</style>
