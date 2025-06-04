@@ -278,14 +278,32 @@ const confirmSubmission = async () => {
 }
 
 .action-button {
-  height: 100px;
-  width: 120px;
+  height: 90px;
+  width: 150px;
   background-color: #008080;
-  border-radius: 25px;
+  border-radius: 50px;
   color: #b2d8d8;
   font-weight: 600;
-  font-size: 35px;
+  font-size: 20px; /* Adjusted font size */
   border: none;
   cursor: pointer;
+  text-align: center;
+  line-height: 1.2;
+}
+
+@media (max-width: 600px) {
+  .action-button {
+    height: 70px;
+    width: 120px;
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .action-button {
+    height: 100px;
+    width: 160px;
+    font-size: 22px;
+  }
 }
 </style>
