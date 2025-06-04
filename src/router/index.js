@@ -5,6 +5,7 @@ import Inventory from '../pages/Inventory.vue';
 const routes = [
   { path: '/', name: 'Home', component: Home },
   { path: '/inventory/:farmerId', name: 'Inventory', component: Inventory, props: true },
+  { path: '/inventory/:farmerId/select-item', name: 'ItemSelection', component: ItemSelection, props: true },
 ]; //updated
 
 const router = createRouter({

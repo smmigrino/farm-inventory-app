@@ -15,7 +15,7 @@
 
     <!-- Add Item Section -->
     <h2 class="section-title">Add Item</h2>
-    <div class="input-box" @click="openItemSelection">
+    <div class="input-box" @click="goToItemSelection">
       <span class="input-text">{{ selectedItem?.name || 'Item Name' }}</span>
     </div>
 
@@ -37,8 +37,7 @@
       <button class="action-button" @click="handleAddMore">Add More</button>
     </div>
 
-    <!-- Modals -->
-    <ItemSelection v-if="showItemSelection" @select="handleItemSelect" @close="closeItemSelection" />
+    <!-- Modals except ItemSelection -->
     <QuantityInput v-if="showQuantityInput" @input="handleQuantityInput" @close="closeQuantityInput" />
     <ValidationDialog v-if="showValidationDialog" @close="closeValidationDialog" />
     <ConfirmDialog v-if="showConfirmDialog" :items="batchItems" @confirm="confirmSubmission" @close="closeConfirmDialog" />
@@ -46,10 +45,9 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { supabase } from '@/lib/supabase';
-import ItemSelection from '@/components/ItemSelection.vue';
 import QuantityInput from '@/components/QuantityInput.vue';
 import ValidationDialog from '@/components/ValidationDialog.vue';
 import ConfirmDialog from '@/components/ConfirmDialog.vue';
@@ -57,72 +55,57 @@ import ConfirmDialog from '@/components/ConfirmDialog.vue';
 const router = useRouter();
 const route = useRoute();
 const farmerId = route.params.farmerId;
-const farmerName = ref(''); // Fetch from Supabase based on farmerId
+const farmerName = ref(''); // fetched from Supabase
 
 // State variables
 const selectedItem = ref(null);
 const quantity = ref(null);
 const srpPerKg = ref(null);
 const batchItems = ref([]);
-const showItemSelection = ref(false);
 const showQuantityInput = ref(false);
 const showValidationDialog = ref(false);
 const showConfirmDialog = ref(false);
 
-// Fetch farmer name on component mount
+// Fetch farmer name
 const fetchFarmerName = async () => {
-  const { data, error } = await supabase
-    .from('farmer')
-    .select('name')
-    .eq('id', farmerId)
-    .single();
-  if (data) {
-    farmerName.value = data.name;
-  }
+  const { data } = await supabase.from('farmer').select('name').eq('id', farmerId).single();
+  if (data) farmerName.value = data.name;
 };
 fetchFarmerName();
 
-// Navigation
+// Receive selected item from route query (when navigated back from ItemSelection)
+onMounted(() => {
+  if (route.query.selectedItem) {
+    try {
+      const item = JSON.parse(route.query.selectedItem);
+      selectedItem.value = item;
+      fetchSRP(item.id);
+      // Clear the query param so it won't reapply on reload
+      router.replace({ query: { ...route.query, selectedItem: undefined } });
+    } catch {}
+  }
+});
+
+const fetchSRP = async (itemId) => {
+  const { data } = await supabase.from('item').select('srp_per_kg').eq('id', itemId).single();
+  if (data) srpPerKg.value = data.srp_per_kg;
+};
+
 const goBack = () => {
   router.push('/');
 };
 
-// Open modals
-const openItemSelection = () => {
-  showItemSelection.value = true;
+const goToItemSelection = () => {
+  // Navigate to ItemSelection page with farmerId so it knows context
+  router.push({ name: 'ItemSelection', params: { farmerId } });
 };
+
 const openQuantityInput = () => {
   showQuantityInput.value = true;
 };
 
-// Close modals
-const closeItemSelection = () => {
-  showItemSelection.value = false;
-};
 const closeQuantityInput = () => {
   showQuantityInput.value = false;
-};
-const closeValidationDialog = () => {
-  showValidationDialog.value = false;
-};
-const closeConfirmDialog = () => {
-  showConfirmDialog.value = false;
-};
-
-// Handle selections
-const handleItemSelect = async (item) => {
-  selectedItem.value = item;
-  showItemSelection.value = false;
-
-  // Fetch SRP per KG
-  const { data, error } = await supabase
-    .from('item')
-    .select('srp_per_kg')
-    .eq('id', item.id)
-    .single();
-  if (data) {
-    srpPerKg.value = data.srp_per_kg;
-  }
 };
 
 const handleQuantityInput = (qty) => {
@@ -130,15 +113,9 @@ const handleQuantityInput = (qty) => {
   showQuantityInput.value = false;
 };
 
-// Format currency
-const formatCurrency = (value) => {
-  return new Intl.NumberFormat('en-PH', {
-    style: 'currency',
-    currency: 'PHP',
-  }).format(value);
-};
+const formatCurrency = (value) =>
+  new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(value);
 
-// Handle Add More
 const handleAddMore = () => {
   if (!selectedItem.value || !quantity.value) {
     showValidationDialog.value = true;
@@ -158,24 +135,27 @@ const handleAddMore = () => {
     date,
   });
 
-  // Reset selections
   selectedItem.value = null;
   quantity.value = null;
   srpPerKg.value = null;
 };
 
-// Handle Submit
 const handleSubmit = () => {
   if (!selectedItem.value || !quantity.value) {
     showValidationDialog.value = true;
     return;
   }
-
   handleAddMore();
   showConfirmDialog.value = true;
 };
 
-// Confirm Submission
+const closeValidationDialog = () => {
+  showValidationDialog.value = false;
+};
+const closeConfirmDialog = () => {
+  showConfirmDialog.value = false;
+};
+
 const confirmSubmission = async () => {
   for (const item of batchItems.value) {
     await supabase.from('batch').insert({
@@ -187,123 +167,6 @@ const confirmSubmission = async () => {
       date: item.date,
     });
   }
-
-  // Navigate to ItemSummary.vue
   router.push({ name: 'ItemSummary', params: { farmerId } });
 };
 </script>
-
-<style scoped>
-.inventory-container {
-  padding: 20px;
-  font-family: Roboto, sans-serif;
-}
-
-.app-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #006666;
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
-  height: 105px;
-  padding: 0 20px;
-}
-
-.app-bar-left {
-  display: flex;
-  align-items: center;
-}
-
-.avatar {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background-color: white;
-  margin-right: 10px;
-}
-
-.farmer-name {
-  color: #b2d8d8;
-  font-size: 32px;
-}
-
-.back-icon {
-  width: 50px;
-  cursor: pointer;
-}
-
-.header {
-  text-align: center;
-  color: #006666;
-  font-size: 32px;
-  margin: 20px 0 50px 0;
-}
-
-.section-title {
-  text-align: center;
-  color: #006666;
-  font-size: 25px;
-  margin: 0 0 20px 0;
-}
-
-.input-box {
-  background-color: #006666;
-  border-radius: 20px;
-  margin: 0 0 70px 0;
-  text-align: center;
-  padding: 10px;
-  cursor: pointer;
-}
-
-.input-text {
-  font-family: 'Inter', sans-serif;
-  font-style: italic;
-  font-size: 20px;
-  color: #b2d8d8;
-}
-
-.srp-text {
-  text-align: center;
-  font-size: 20px;
-  color: #006666;
-  margin-bottom: 50px;
-}
-
-.button-row {
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-  margin: 50px 0;
-}
-
-.action-button {
-  height: 90px;
-  width: 150px;
-  background-color: #008080;
-  border-radius: 50px;
-  color: #b2d8d8;
-  font-weight: 600;
-  font-size: 20px; /* Adjusted font size */
-  border: none;
-  cursor: pointer;
-  text-align: center;
-  line-height: 1.2;
-}
-
-@media (max-width: 600px) {
-  .action-button {
-    height: 70px;
-    width: 120px;
-    font-size: 18px;
-  }
-}
-
-@media (min-width: 1200px) {
-  .action-button {
-    height: 100px;
-    width: 160px;
-    font-size: 22px;
-  }
-}
-</style>

@@ -19,9 +19,10 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { supabase } from '@/lib/supabase';
 
-const emit = defineEmits(['select', 'close']);
+const router = useRouter();
 const items = ref([]);
 
 onMounted(async () => {
@@ -32,7 +33,11 @@ onMounted(async () => {
 });
 
 const selectItem = (item) => {
-  emit('select', item);
+  // Navigate back to Inventory page passing selected item as route state or query param
+  router.push({ 
+    name: 'Inventory', 
+    query: { selectedItemId: item.id, selectedItemName: item.name } 
+  });
 };
 </script>
 
