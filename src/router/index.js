@@ -8,7 +8,7 @@ const routes = [
   { path: '/', name: 'Home', component: Home },
   { path: '/inventory/:farmerId', name: 'Inventory', component: Inventory, props: true },
   { path: '/inventory/:farmerId/select-item', name: 'ItemSelection', component: ItemSelection, props: true },
-  { path: '/inventory/:farmerId/select-item/quantity', name: 'QuantityInput', component: QuantityInputPage, props: true },
+  { path: '/inventory/:farmerId/select-item/quantity', name: 'QuantityInput', component: QuantityInput, props: true },
 ]; //updated
 
 const router = createRouter({
