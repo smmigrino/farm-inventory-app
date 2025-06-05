@@ -47,7 +47,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { supabase } from '@/lib/supabase';
 import ValidationDialog from '@/components/ValidationDialog.vue';
