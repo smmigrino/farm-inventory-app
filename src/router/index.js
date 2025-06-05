@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../pages/Home.vue';
 import Inventory from '../pages/Inventory.vue';
 import ItemSelection from '../pages/ItemSelection.vue';
-import QuantityInputPage from '../pages/QuantityInputPage.vue';
+import QuantityInputPage from '../pages/QuantityInput.vue';
 
 const routes = [
   { path: '/', name: 'Home', component: Home },
