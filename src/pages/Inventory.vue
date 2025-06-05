@@ -38,7 +38,6 @@
     </div>
 
     <!-- Modals except ItemSelection -->
-    <QuantityInput v-if="showQuantityInput" @input="handleQuantityInput" @close="closeQuantityInput" />
     <ValidationDialog v-if="showValidationDialog" @close="closeValidationDialog" />
     <ConfirmDialog v-if="showConfirmDialog" :items="batchItems" @confirm="confirmSubmission" @close="closeConfirmDialog" />
   </div>
@@ -48,7 +47,6 @@
 import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { supabase } from '@/lib/supabase';
-import QuantityInput from '@/pages/QuantityInput.vue';
 import ValidationDialog from '@/components/ValidationDialog.vue';
 import ConfirmDialog from '@/components/ConfirmDialog.vue';
 
@@ -84,6 +82,11 @@ onMounted(() => {
       router.replace({ query: { ...route.query, selectedItem: undefined } });
     } catch {}
   }
+  if (route.query.quantity) {
+    quantity.value = parseFloat(route.query.quantity);
+    router.replace({ query: { ...route.query, quantity: undefined } });
+  }
+
 });
 
 const fetchSRP = async (itemId) => {
@@ -100,18 +103,19 @@ const goToItemSelection = () => {
   router.push({ name: 'ItemSelection', params: { farmerId } });
 };
 
+// Navigate to ItemSelection page with farmerId so it knows context
 const openQuantityInput = () => {
-  showQuantityInput.value = true;
+  router.push({
+    name: 'QuantityInput',
+    params: { farmerId },
+    query: { currentQty: quantity.value || 0 }
+  });
 };
 
 const closeQuantityInput = () => {
   showQuantityInput.value = false;
 };
 
-const handleQuantityInput = (qty) => {
-  quantity.value = qty;
-  showQuantityInput.value = false;
-};
 
 const formatCurrency = (value) =>
   new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(value);
