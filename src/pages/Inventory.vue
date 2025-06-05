@@ -48,7 +48,7 @@
 import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { supabase } from '@/lib/supabase';
-import QuantityInput from '@/components/QuantityInput.vue';
+import QuantityInput from '@/pages/QuantityInput.vue';
 import ValidationDialog from '@/components/ValidationDialog.vue';
 import ConfirmDialog from '@/components/ConfirmDialog.vue';
 
