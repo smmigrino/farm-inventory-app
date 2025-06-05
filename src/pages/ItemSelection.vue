@@ -36,7 +36,7 @@ const selectItem = (item) => {
   // Navigate back to Inventory page passing selected item as route state or query param
   router.push({ 
     name: 'Inventory', 
-    query: { selectedItemId: JSON.stringify(item) } 
+    query: { selectedItem: JSON.stringify(item) } 
   });
 };
 </script>
