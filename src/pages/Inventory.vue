@@ -15,18 +15,15 @@
 
     <!-- Add Item Section -->
     <h2 class="section-title">Add Item</h2>
-    <router-link :to="{ name: 'ItemSelection', params: { farmerId } }" class="input-box">
+    <div class="input-box" @click="goToItemSelection">
       <span class="input-text">{{ selectedItem?.name || 'Item Name' }}</span>
-    </router-link>
+    </div>
 
-  <!-- Quantity Section -->
-  <h2 class="section-title">Quantity</h2>
-  <router-link
-    :to="{ name: 'QuantityInputPage', query: { quantity: quantity || 0 } }"
-    class="input-box"
-  >
-    <span class="input-text">{{ quantity !== null ? quantity + 'kg' : '00kg' }}</span>
-  </router-link>
+    <!-- Quantity Section -->
+    <h2 class="section-title">Quantity</h2>
+    <div class="input-box" @click="openQuantityInput">
+      <span class="input-text">{{ quantity ? quantity + 'kg' : '00kg' }}</span>
+    </div>
 
     <!-- SRP per KG -->
     <h2 class="section-title">SRP per KG</h2>
@@ -40,64 +37,54 @@
       <button class="action-button" @click="handleAddMore">Add More</button>
     </div>
 
-    <!-- Dialogs -->
+    <!-- Modals except ItemSelection -->
+    <QuantityInput v-if="showQuantityInput" @input="handleQuantityInput" @close="closeQuantityInput" />
     <ValidationDialog v-if="showValidationDialog" @close="closeValidationDialog" />
     <ConfirmDialog v-if="showConfirmDialog" :items="batchItems" @confirm="confirmSubmission" @close="closeConfirmDialog" />
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { supabase } from '@/lib/supabase';
+import QuantityInput from '@/components/QuantityInput.vue';
 import ValidationDialog from '@/components/ValidationDialog.vue';
 import ConfirmDialog from '@/components/ConfirmDialog.vue';
 
 const router = useRouter();
 const route = useRoute();
 const farmerId = route.params.farmerId;
-const farmerName = ref('');
+const farmerName = ref(''); // fetched from Supabase
 
+// State variables
 const selectedItem = ref(null);
 const quantity = ref(null);
 const srpPerKg = ref(null);
 const batchItems = ref([]);
+const showQuantityInput = ref(false);
 const showValidationDialog = ref(false);
 const showConfirmDialog = ref(false);
 
+// Fetch farmer name
 const fetchFarmerName = async () => {
   const { data } = await supabase.from('farmer').select('name').eq('id', farmerId).single();
   if (data) farmerName.value = data.name;
 };
 fetchFarmerName();
 
+// Receive selected item from route query (when navigated back from ItemSelection)
 onMounted(() => {
   if (route.query.selectedItem) {
     try {
       const item = JSON.parse(route.query.selectedItem);
       selectedItem.value = item;
       fetchSRP(item.id);
+      // Clear the query param so it won't reapply on reload
       router.replace({ query: { ...route.query, selectedItem: undefined } });
     } catch {}
   }
-
-  if (route.query.quantity) {
-    quantity.value = Number(route.query.quantity);
-    // Clear the query param after reading to prevent loop
-    router.replace({ query: { ...route.query, quantity: undefined } });
-  }
 });
-
-// Watch for route changes to update quantity if navigated back with quantity
-watch(
-  () => route.query.quantity,
-  (newQty) => {
-    if (newQty !== undefined) {
-      quantity.value = Number(newQty);
-      router.replace({ query: { ...route.query, quantity: undefined } });
-    }
-  }
-);
 
 const fetchSRP = async (itemId) => {
   const { data } = await supabase.from('item').select('srp_per_kg').eq('id', itemId).single();
@@ -106,6 +93,24 @@ const fetchSRP = async (itemId) => {
 
 const goBack = () => {
   router.push('/');
+};
+
+const goToItemSelection = () => {
+  // Navigate to ItemSelection page with farmerId so it knows context
+  router.push({ name: 'ItemSelection', params: { farmerId } });
+};
+
+const openQuantityInput = () => {
+  showQuantityInput.value = true;
+};
+
+const closeQuantityInput = () => {
+  showQuantityInput.value = false;
+};
+
+const handleQuantityInput = (qty) => {
+  quantity.value = qty;
+  showQuantityInput.value = false;
 };
 
 const formatCurrency = (value) =>
