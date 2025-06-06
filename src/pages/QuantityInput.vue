@@ -80,7 +80,7 @@ const confirmQuantity = () => {
 .title {
   font-style: italic;
   font-size: 20px;
-  margin: 100px 0 20px 0;
+  margin: 40px 0 20px 0;
   text-align: center;
   color: #004C4C;
 }
