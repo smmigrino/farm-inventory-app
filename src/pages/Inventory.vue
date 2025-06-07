@@ -178,7 +178,7 @@ const confirmSubmission = async () => {
 
 <style scoped>
 .inventory-container {
-  padding: 20px 0;
+  padding: 0 0 20px 0;
   font-family: Roboto, sans-serif;
 }
 
@@ -191,6 +191,7 @@ const confirmSubmission = async () => {
   border-bottom-right-radius: 20px;
   height: 105px;
   padding: 0 20px;
+  margin: 0;
 }
 
 .app-bar-left {
