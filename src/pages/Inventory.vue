@@ -178,7 +178,7 @@ const confirmSubmission = async () => {
 
 <style scoped>
 .inventory-container {
-  padding: 20px;
+  padding: 20px 0;
   font-family: Roboto, sans-serif;
 }
 
@@ -233,7 +233,7 @@ const confirmSubmission = async () => {
 .input-box {
   background-color: #006666;
   border-radius: 20px;
-  margin: 0 0 70px 0;
+  margin: 0 20px 70px 20px;
   text-align: center;
   padding: 10px;
   cursor: pointer;
