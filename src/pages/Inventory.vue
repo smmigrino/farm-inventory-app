@@ -11,7 +11,7 @@
     </div>
 
     <!-- Header -->
-    <h1 class="header">Log to Inventory</h1>
+    <h1 class="header">THIS IS THE INVENTORY</h1>
 
     <!-- Add Item Section -->
     <h2 class="section-title">Add Item</h2>
