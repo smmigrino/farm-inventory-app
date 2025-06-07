@@ -9,7 +9,7 @@
         class="item"
         @click="selectItem(item)"
       >
-        <div class="divider"></div>
+        
         <div class="item-name">{{ item.name }}</div>
         <div class="divider"></div>
       </div>
