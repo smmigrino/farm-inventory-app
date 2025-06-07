@@ -191,7 +191,6 @@ const confirmSubmission = async () => {
   border-bottom-right-radius: 20px;
   height: 105px;
   padding: 0 20px;
-  margin: 1px;
 }
 
 .app-bar-left {
