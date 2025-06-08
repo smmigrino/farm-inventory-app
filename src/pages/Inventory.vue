@@ -180,6 +180,7 @@ const confirmSubmission = async () => {
 .inventory-container {
   padding: 20px;
   font-family: Roboto, sans-serif;
+  margin: 0;
 }
 
 .app-bar {
