@@ -74,19 +74,33 @@ fetchFarmerName();
 // Receive selected item from route query (when navigated back from ItemSelection)
 onMounted(() => {
   const q = route.query;
+
   if (q.selectedItem) {
     try {
       selectedItem.value = JSON.parse(q.selectedItem);
       fetchSRP(selectedItem.value.id);
     } catch {}
+  } else {
+    const storedItem = localStorage.getItem('selectedItem');
+    if (storedItem) {
+      selectedItem.value = JSON.parse(storedItem);
+      fetchSRP(selectedItem.value.id);
+    }
   }
+
   if (q.quantity) {
     quantity.value = parseFloat(q.quantity);
+  } else {
+    const storedQty = localStorage.getItem('quantity');
+    if (storedQty) {
+      quantity.value = parseFloat(storedQty);
+    }
   }
-  // Clear both query params at once
-  router.replace({query: {} });
 
+  // Clear both query params
+  router.replace({ query: {} });
 });
+
 
 const fetchSRP = async (itemId) => {
   const { data } = await supabase.from('item').select('srp_per_kg').eq('id', itemId).single();
@@ -98,6 +112,13 @@ const goBack = () => {
 };
 
 const goToItemSelection = () => {
+    if (selectedItem.value) {
+    localStorage.setItem('selectedItem', JSON.stringify(selectedItem.value));
+  }
+  if (quantity.value) {
+    localStorage.setItem('quantity', quantity.value);
+  }
+
   // Navigate to ItemSelection page with farmerId so it knows context
   router.push({ 
     name: 'ItemSelection',
@@ -111,6 +132,12 @@ const goToItemSelection = () => {
 
 // Navigate to ItemSelection page with farmerId so it knows context
 const openQuantityInput = () => {
+    if (selectedItem.value) {
+    localStorage.setItem('selectedItem', JSON.stringify(selectedItem.value));
+  }
+  if (quantity.value) {
+    localStorage.setItem('quantity', quantity.value);
+  }
   router.push({
     name: 'QuantityInput',
     params: { farmerId },
