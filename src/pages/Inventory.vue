@@ -1,6 +1,10 @@
 <!-- src/pages/Inventory.vue -->
 <template>
-  <div class="inventory-container">
+
+   <ValidationDialog v-if="showValidationDialog" @close="closeValidationDialog" />
+   <ConfirmDialog v-if="showConfirmDialog" :items="batchItems" @confirm="confirmSubmission" @close="closeConfirmDialog" />
+  
+   <div class="inventory-container">
     <!-- App Bar -->
     <div class="app-bar">
       <div class="app-bar-left">
@@ -37,7 +41,7 @@
       <button class="action-button" @click="handleAddMore">Add More</button>
     </div>
 
-    <!-- Modals except ItemSelection -->
+
     <ValidationDialog v-if="showValidationDialog" @close="closeValidationDialog" />
     <ConfirmDialog v-if="showConfirmDialog" :items="batchItems" @confirm="confirmSubmission" @close="closeConfirmDialog" />
   </div>
