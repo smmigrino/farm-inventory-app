@@ -76,8 +76,8 @@ onMounted(() => {
   const q = route.query;
   if (q.selectedItem) {
     try {
-      selectedItemItem.value = JSON.parse(q.selectedItem);
-      fetchSRP(item.id);
+      selectedItem.value = JSON.parse(q.selectedItem);
+      fetchSRP(selectedItem.value.id);
     } catch {}
   }
   if (q.quantity) {
