@@ -41,9 +41,6 @@
       <button class="action-button" @click="handleAddMore">Add More</button>
     </div>
 
-
-    <ValidationDialog v-if="showValidationDialog" @close="closeValidationDialog" />
-    <ConfirmDialog v-if="showConfirmDialog" :items="batchItems" @confirm="confirmSubmission" @close="closeConfirmDialog" />
   </div>
 </template>
 
