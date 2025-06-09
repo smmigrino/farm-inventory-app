@@ -2,26 +2,25 @@
   <div class="overlay" v-if="visible">
     <div class="dialog">
       <p class="message">Please complete Add Item and Quantity before proceeding.</p>
-      <button class="close-btn" @click="closeDialog">Close</button>
+      <button class="close-btn" @click="emitClose">Close</button>
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'ValidationDialog',
-  props: {
-    visible: {
-      type: Boolean,
-      required: true
-    }
-  },
-  emits: ['close'],
-  methods: {
-    closeDialog() {
-      this.$emit('close');
-    }
+<script setup>
+import { defineProps, defineEmits } from 'vue';
+
+const props = defineProps({
+  visible: {
+    type: Boolean,
+    required: true
   }
+});
+
+const emit = defineEmits(['close']);
+
+function emitClose() {
+  emit('close');
 }
 </script>
 
