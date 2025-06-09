@@ -73,19 +73,18 @@ fetchFarmerName();
 
 // Receive selected item from route query (when navigated back from ItemSelection)
 onMounted(() => {
-  if (route.query.selectedItem) {
+  const q = route.query;
+  if (q.selectedItem) {
     try {
-      const item = JSON.parse(route.query.selectedItem);
-      selectedItem.value = item;
+      selectedItemItem.value = JSON.parse(q.selectedItem);
       fetchSRP(item.id);
-      // Clear the query param so it won't reapply on reload
-      router.replace({ query: { ...route.query, selectedItem: undefined } });
     } catch {}
   }
-  if (route.query.quantity) {
-    quantity.value = parseFloat(route.query.quantity);
-    router.replace({ query: { ...route.query, quantity: undefined } });
+  if (q.quantity) {
+    quantity.value = parseFloat(q.quantity);
   }
+  // Clear both query params at once
+  router.replace({query: {} });
 
 });
 
@@ -100,7 +99,14 @@ const goBack = () => {
 
 const goToItemSelection = () => {
   // Navigate to ItemSelection page with farmerId so it knows context
-  router.push({ name: 'ItemSelection', params: { farmerId } });
+  router.push({ 
+    name: 'ItemSelection',
+    params: { farmerId },
+    query: {
+      selectedItem: selectedItem.value ? JSON.stringify(selectedItem.value) : undefined,
+      quantity: quantity.value || undefined,
+       } 
+    });
 };
 
 // Navigate to ItemSelection page with farmerId so it knows context
@@ -108,7 +114,9 @@ const openQuantityInput = () => {
   router.push({
     name: 'QuantityInput',
     params: { farmerId },
-    query: { currentQty: quantity.value || 0 }
+    query: {
+      selectedItem: selectedItem.value ? JSON.stringify(selectedItem.value) : undefined,
+      quantity: quantity.value || undefined, }
   });
 };
 
