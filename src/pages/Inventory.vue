@@ -97,6 +97,14 @@ onMounted(() => {
     }
   }
 
+    const storedBatch = localStorage.getItem('batchItems');
+  if (storedBatch) {
+    try {
+      batchItems.value = JSON.parse(storedBatch);
+    } catch {}
+  }
+
+
   // Clear both query params
   router.replace({ query: {} });
 });
@@ -164,19 +172,25 @@ const handleAddMore = () => {
   const totalCost = srpPerKg.value * quantity.value;
   const date = new Date().toISOString();
 
-  batchItems.value.push({
-    farmer_id: farmerId,
-    item_id: selectedItem.value.id,
-    item_name: selectedItem.value.name,
-    qty_kg: quantity.value,
-    srp_per_kg: srpPerKg.value,
-    total_cost: totalCost,
-    date,
-  });
+  const newItem = {
+  farmer_id: farmerId,
+  item_id: selectedItem.value.id,
+  item_name: selectedItem.value.name,
+  qty_kg: quantity.value,
+  srp_per_kg: srpPerKg.value,
+  total_cost: totalCost,
+  date,
+};
+
+  batchItems.value.push(newItem);
+  localStorage.setItem('batchItems', JSON.stringify(batchItems.value)); 
 
   selectedItem.value = null;
   quantity.value = null;
   srpPerKg.value = null;
+
+  localStorage.removeItem('selectedItem');
+  localStorage.removeItem('quantity');
 };
 
 const handleSubmit = () => {
@@ -206,6 +220,8 @@ const confirmSubmission = async () => {
       date: item.date,
     });
   }
+  batchItems.value = [];
+  localStorage.removeItem('batchItems');
   router.push({ name: 'ItemSummary', params: { farmerId } });
 };
 </script>
